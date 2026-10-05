@@ -5,6 +5,18 @@ const pool = require('./db');
 
 const app = express();
 app.use(cors());
+
+// Muestra en la consola cada pedido que llega y cómo terminó.
+// Sirve para saber si la app realmente está llegando al servidor.
+app.use((req, res, next) => {
+  const inicio = Date.now();
+  console.log(`→ ${req.method} ${req.originalUrl}`);
+  res.on('finish', () => {
+    console.log(`← ${req.method} ${req.originalUrl} ${res.statusCode} (${Date.now() - inicio} ms)`);
+  });
+  next();
+});
+
 app.use(express.json());
 
 app.use('/categorias', require('./routes/categorias'));

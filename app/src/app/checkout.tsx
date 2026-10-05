@@ -11,7 +11,7 @@ import {
 } from 'react-native';
 import { router, useFocusEffect } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import api from '../services/api';
+import api, { API_URL } from '../services/api';
 import { autenticarConFaceId } from '../utils/biometria';
 import LeyendaLegal from '../components/leyenda-legal';
 
@@ -119,9 +119,21 @@ export default function CheckoutScreen() {
         ]
       );
     } catch (error: any) {
-      const mensaje = error.response?.data?.error || 'No se pudo confirmar el pedido';
-      Alert.alert('Error', mensaje);
-      console.error('Error confirmando pedido:', error);
+      console.error('Error confirmando pedido:', error?.code, error?.message, error?.response?.status);
+      if (error.response) {
+        // El servidor respondió con un error (stock, carrito vacío, etc.)
+        Alert.alert('Error', error.response.data?.error || `Error ${error.response.status} del servidor`);
+      } else if (error.code === 'ECONNABORTED') {
+        Alert.alert(
+          'El servidor tardó demasiado',
+          `El pedido llegó a ${API_URL} pero no respondió a tiempo. Revisá la consola del backend.`
+        );
+      } else {
+        Alert.alert(
+          'Sin conexión con el servidor',
+          `No se pudo llegar a ${API_URL}/pedidos (${error.message}). Revisá que el backend esté corriendo.`
+        );
+      }
     } finally {
       setConfirmando(false);
     }

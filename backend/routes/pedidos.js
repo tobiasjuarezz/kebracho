@@ -16,9 +16,12 @@ router.post('/', async (req, res) => {
     return res.status(400).json({ error: 'Ingresá la dirección de entrega' });
   }
 
-  const client = await pool.connect();
+  let client;
 
   try {
+    console.log(`[pedidos] Usuario ${req.usuario.id} confirma pedido, conectando a la base...`);
+    client = await pool.connect();
+    console.log('[pedidos] Conectado, arranca la transacción');
     await client.query('BEGIN');
 
     const carrito = await client.query('SELECT * FROM carritos WHERE usuario_id = $1', [req.usuario.id]);
@@ -82,6 +85,7 @@ router.post('/', async (req, res) => {
     await client.query('DELETE FROM carrito_items WHERE carrito_id = $1', [carritoId]);
 
     await client.query('COMMIT');
+    console.log(`[pedidos] Pedido #${pedidoId} guardado`);
 
     // Respondemos el pedido ya confirmado. El mail se manda aparte,
     // sin bloquear la respuesta, para que si Gmail tarda o falla
@@ -109,11 +113,13 @@ router.post('/', async (req, res) => {
       console.error('No se pudo enviar el mail de alerta de compra:', errorMail);
     });
   } catch (error) {
-    await client.query('ROLLBACK').catch(() => {});
-    console.error(error);
-    res.status(500).json({ error: 'No se pudo confirmar el pedido' });
+    if (client) await client.query('ROLLBACK').catch(() => {});
+    console.error('[pedidos] Error al confirmar el pedido:', error);
+    if (!res.headersSent) {
+      res.status(500).json({ error: 'El servidor no pudo guardar el pedido: ' + error.message });
+    }
   } finally {
-    client.release();
+    if (client) client.release();
   }
 });
 
