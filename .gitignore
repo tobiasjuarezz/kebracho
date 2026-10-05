@@ -1,0 +1,21 @@
+# Dependencias
+node_modules/
+
+# Variables de entorno (contraseñas, claves) — NUNCA subir
+.env
+.env.*
+!.env.example
+
+# Builds
+dist/
+web-build/
+.expo/
+
+# Carpetas del editor y de herramientas
+.vscode/
+.claude/
+
+# Otros
+*.log
+.DS_Store
+Thumbs.db
