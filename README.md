@@ -105,7 +105,7 @@ La solución que propongo es una aplicación móvil propia de Kebracho (y una p�
 
 ## 4. Asignación de tareas
 
-El proyecto lo desarrollo de forma individual, así que tomo todas las responsabilidades del equipo. Igual las separo por rol, para organizar el trabajo y saber qué parte del sistema estoy haciendo en cada momento. Cada tarea está cargada como issue en la pestaña **Issues** y organizada en el tablero de **Projects** de este repositorio.
+El proyecto lo desarrollo de forma individual, así que tomo todas las responsabilidades del equipo. Igual las separo por rol, para organizar el trabajo y saber qué parte del sistema estoy haciendo en cada momento. El detalle de cada tarea, con su estado y la revisión en la que tiene que estar lista, está en [`TAREAS.md`](TAREAS.md).
 
 | Rol | Responsable | Tareas |
 |-----|-------------|--------|
@@ -188,6 +188,7 @@ npm run dev
 
 ## 7. Documentación
 
+- [`TAREAS.md`](TAREAS.md): tablero de tareas por revisión, con el estado de cada una.
 - [`docs/Kebracho-Manual-Identidad.docx`](docs/Kebracho-Manual-Identidad.docx): manual de identidad visual (logo, colores, tamaños, versiones y mockups).
 - [`docs/Kebracho-Proyecto-Integrador.docx`](docs/Kebracho-Proyecto-Integrador.docx): documento del proyecto (GitHub, tareas, identidad, problemática, resolución, requisitos, historias de usuario, diagramas y casos de prueba).
 
