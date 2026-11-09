@@ -40,3 +40,16 @@ img {
   max-width: 100%;
   display: block;
 }
+/* Header en celulares: el menú baja a una segunda fila para que nada se salga de la pantalla */
+@media (max-width: 700px) {
+  .header-contenedor {
+    padding: 12px 16px !important;
+    gap: 12px !important;
+  }
+  .header-nav {
+    order: 3;
+    width: 100%;
+    justify-content: space-between;
+    gap: 12px !important;
+  }
+}

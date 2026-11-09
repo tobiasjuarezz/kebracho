@@ -16,6 +16,16 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
+// Saca el mensaje de error que manda el servidor ({ error: '...' }).
+// Si no hay respuesta (servidor apagado, sin internet) devuelve el mensaje por defecto.
+export function mensajeDeError(error: unknown, porDefecto: string): string {
+  if (axios.isAxiosError(error)) {
+    const datos = error.response?.data as { error?: string } | undefined;
+    if (datos?.error) return datos.error;
+  }
+  return porDefecto;
+}
+
 export function cerrarSesion() {
   localStorage.removeItem('token');
   localStorage.removeItem('usuario');

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import api from '../services/api';
+import api, { mensajeDeError } from '../services/api';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 
@@ -23,44 +23,43 @@ function Catalogo() {
   const { id } = useParams<{ id: string }>();
   const [productos, setProductos] = useState<Producto[]>([]);
   const [categoria, setCategoria] = useState<Categoria | null>(null);
-  const [cargando, setCargando] = useState(true);
+  // Guarda para qué categoría ya se cargaron los datos:
+  // mientras no coincida con la de la URL, se muestra "Cargando".
+  const [cargadoPara, setCargadoPara] = useState<string | undefined>(undefined);
   const [mensaje, setMensaje] = useState('');
+  const cargando = cargadoPara !== id;
 
   useEffect(() => {
-    cargarDatos();
+    let activo = true;
+    Promise.all([api.get('/categorias'), api.get('/productos')])
+      .then(([respuestaCategorias, respuestaProductos]) => {
+        if (!activo) return;
+        const categoriaActual = respuestaCategorias.data.find(
+          (c: Categoria) => c.id === Number(id)
+        );
+        setCategoria(categoriaActual || null);
+
+        const filtrados = respuestaProductos.data.filter(
+          (p: Producto) => p.categoria_id === Number(id)
+        );
+        setProductos(filtrados);
+      })
+      .catch((error) => console.error(error))
+      .finally(() => {
+        if (activo) setCargadoPara(id);
+      });
+    return () => {
+      activo = false;
+    };
   }, [id]);
-
-  const cargarDatos = async () => {
-    setCargando(true);
-    try {
-      const [respuestaCategorias, respuestaProductos] = await Promise.all([
-        api.get('/categorias'),
-        api.get('/productos'),
-      ]);
-
-      const categoriaActual = respuestaCategorias.data.find(
-        (c: Categoria) => c.id === Number(id)
-      );
-      setCategoria(categoriaActual || null);
-
-      const filtrados = respuestaProductos.data.filter(
-        (p: Producto) => p.categoria_id === Number(id)
-      );
-      setProductos(filtrados);
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setCargando(false);
-    }
-  };
 
   const agregarAlCarrito = async (producto: Producto) => {
     try {
       await api.post('/carrito/items', { producto_id: producto.id, cantidad: 1 });
       setMensaje(`${producto.nombre} se agregó al carrito`);
       setTimeout(() => setMensaje(''), 2500);
-    } catch (error: any) {
-      setMensaje(error.response?.data?.error || 'No se pudo agregar al carrito');
+    } catch (error) {
+      setMensaje(mensajeDeError(error, 'No se pudo agregar al carrito'));
       setTimeout(() => setMensaje(''), 2500);
     }
   };

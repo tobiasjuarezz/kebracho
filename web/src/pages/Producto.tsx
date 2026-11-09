@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import api from '../services/api';
+import api, { mensajeDeError } from '../services/api';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 
@@ -20,26 +20,30 @@ type ProductoTipo = {
 function Producto() {
   const { id } = useParams<{ id: string }>();
   const [producto, setProducto] = useState<ProductoTipo | null>(null);
-  const [cargando, setCargando] = useState(true);
   const [cantidad, setCantidad] = useState(1);
   const [mensaje, setMensaje] = useState('');
+  // Guarda para qué producto ya se cargaron los datos:
+  // mientras no coincida con el de la URL, se muestra "Cargando".
+  const [cargadoPara, setCargadoPara] = useState<string | undefined>(undefined);
+  const cargando = cargadoPara !== id;
 
   useEffect(() => {
-    cargarProducto();
-    setCantidad(1);
+    let activo = true;
+    api
+      .get(`/productos/${id}`)
+      .then((respuesta) => {
+        if (!activo) return;
+        setProducto(respuesta.data);
+        setCantidad(1); // al cambiar de producto, la cantidad vuelve a 1
+      })
+      .catch((error) => console.error(error))
+      .finally(() => {
+        if (activo) setCargadoPara(id);
+      });
+    return () => {
+      activo = false;
+    };
   }, [id]);
-
-  const cargarProducto = async () => {
-    setCargando(true);
-    try {
-      const respuesta = await api.get(`/productos/${id}`);
-      setProducto(respuesta.data);
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setCargando(false);
-    }
-  };
 
   const cambiarCantidad = (delta: number) => {
     setCantidad((prev) => {
@@ -59,8 +63,8 @@ function Producto() {
       });
       setMensaje(`${producto.nombre} se agregó al carrito`);
       setTimeout(() => setMensaje(''), 3000);
-    } catch (error: any) {
-      setMensaje(error.response?.data?.error || 'No se pudo agregar al carrito');
+    } catch (error) {
+      setMensaje(mensajeDeError(error, 'No se pudo agregar al carrito'));
       setTimeout(() => setMensaje(''), 3000);
     }
   };

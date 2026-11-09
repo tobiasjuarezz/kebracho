@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import api from '../services/api';
+import api, { mensajeDeError } from '../services/api';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 
@@ -22,20 +22,23 @@ function Carrito() {
   const [cargando, setCargando] = useState(true);
   const navigate = useNavigate();
 
+  // Carga el carrito al entrar. "activo" evita actualizar el estado
+  // si el usuario ya se fue de la pantalla antes de que llegue la respuesta.
   useEffect(() => {
-    cargarCarrito();
+    let activo = true;
+    api
+      .get('/carrito')
+      .then((respuesta) => {
+        if (activo) setCarrito(respuesta.data);
+      })
+      .catch((error) => console.error(error))
+      .finally(() => {
+        if (activo) setCargando(false);
+      });
+    return () => {
+      activo = false;
+    };
   }, []);
-
-  const cargarCarrito = async () => {
-    try {
-      const respuesta = await api.get('/carrito');
-      setCarrito(respuesta.data);
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setCargando(false);
-    }
-  };
 
   const cambiarCantidad = async (item: ItemCarrito, nuevaCantidad: number) => {
     if (nuevaCantidad < 1) {
@@ -54,9 +57,9 @@ function Carrito() {
             }
           : prev
       );
-    } catch (error: any) {
+    } catch (error) {
       console.error(error);
-      alert(error.response?.data?.error || 'No se pudo actualizar la cantidad');
+      alert(mensajeDeError(error, 'No se pudo actualizar la cantidad'));
     }
   };
 

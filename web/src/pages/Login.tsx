@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import api from '../services/api';
+import api, { mensajeDeError } from '../services/api';
 
 function Login() {
   const [email, setEmail] = useState('');
@@ -22,8 +22,8 @@ function Login() {
       localStorage.setItem('token', respuesta.data.token);
       localStorage.setItem('usuario', JSON.stringify(respuesta.data.usuario));
       navigate('/');
-    } catch (err: any) {
-      setError(err.response?.data?.error || 'No se pudo conectar con el servidor');
+    } catch (err) {
+      setError(mensajeDeError(err, 'No se pudo conectar con el servidor'));
     } finally {
       setCargando(false);
     }

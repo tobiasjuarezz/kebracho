@@ -12,12 +12,12 @@ function Header() {
 
   return (
     <header style={estilos.header}>
-      <div style={estilos.contenedor}>
+      <div className="header-contenedor" style={estilos.contenedor}>
         <Link to="/" style={estilos.logoContenedor}>
           <img src="/isologo.png" alt="Kebracho" style={{ height: 34, width: 'auto' }} />
         </Link>
 
-        <nav style={estilos.nav}>
+        <nav className="header-nav" style={estilos.nav}>
           <Link to="/" style={estilos.navLink}>
             Inicio
           </Link>
@@ -69,6 +69,7 @@ const estilos: Record<string, React.CSSProperties> = {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'space-between',
+    flexWrap: 'wrap',
     gap: 24,
   },
   logoContenedor: {

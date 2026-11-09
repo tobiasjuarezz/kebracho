@@ -1,8 +1,8 @@
 function Confianza() {
   const datos = [
-    { numero: '+500', texto: 'Clientes satisfechos' },
-    { numero: '24/48hs', texto: 'Tiempo de envío' },
-    { numero: '+50', texto: 'Productos disponibles' },
+    { numero: '+18', texto: 'Venta solo a mayores' },
+    { numero: '24/48hs', texto: 'Entrega en Zona Sur' },
+    { numero: '3', texto: 'Líneas: latas, botellas y merch' },
     { numero: '100%', texto: 'Compra segura' },
   ];
 

@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const pool = require('../db');
 const verificarToken = require('../middleware/auth');
+const { cantidadValida } = require('../utils/validaciones');
 
 // Todas las rutas de acá requieren estar logueado
 router.use(verificarToken);
@@ -16,12 +17,6 @@ async function obtenerOCrearCarrito(usuarioId) {
     );
   }
   return carrito.rows[0].id;
-}
-
-// Valida que la cantidad sea un número entero mayor a 0
-function cantidadValida(valor) {
-  const numero = Number(valor);
-  return Number.isInteger(numero) && numero >= 1;
 }
 
 // Obtener (o crear si no existe) el carrito del usuario logueado, con sus items

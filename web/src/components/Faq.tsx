@@ -23,9 +23,9 @@ function Faq() {
         'Sí, mientras el pedido no haya sido despachado. Contactanos apenas puedas para coordinarlo.',
     },
     {
-      pregunta: '¿Hacen envíos a todo el país?',
+      pregunta: '¿A qué zonas entregan?',
       respuesta:
-        'Hacemos envíos a la mayoría de las zonas de Argentina. Consultanos por tu localidad si tenés dudas.',
+        'Por ahora entregamos en Zona Sur del Gran Buenos Aires. Consultanos por tu localidad si tenés dudas.',
     },
   ];
 

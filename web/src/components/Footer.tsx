@@ -2,12 +2,10 @@ import { Link } from 'react-router-dom';
 
 function Footer() {
   const categorias = [
-    'Cervezas',
-    'Vinos',
-    'Whisky',
-    'Gin',
-    'Espumantes',
-    'Vodka',
+    'Latas',
+    'Botellas',
+    'Packs',
+    'Merchandising',
   ];
 
   return (
