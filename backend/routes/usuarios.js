@@ -4,41 +4,7 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const pool = require('../db');
 const verificarToken = require('../middleware/auth');
-
-// Devuelve la edad en años, o null si la fecha no es válida (ej: 2007-02-31)
-function calcularEdad(fechaNacimiento) {
-  const coincide = /^(\d{4})-(\d{2})-(\d{2})$/.exec(String(fechaNacimiento));
-  if (!coincide) return null;
-
-  const anio = Number(coincide[1]);
-  const mesNac = Number(coincide[2]);
-  const dia = Number(coincide[3]);
-  const nacimiento = new Date(anio, mesNac - 1, dia);
-
-  // Si la fecha no existe, JavaScript la "corre" (31/02 pasa a 03/03), así que la comparo
-  if (
-    nacimiento.getFullYear() !== anio ||
-    nacimiento.getMonth() !== mesNac - 1 ||
-    nacimiento.getDate() !== dia
-  ) {
-    return null;
-  }
-
-  const hoy = new Date();
-  if (nacimiento > hoy) return null;
-
-  let edad = hoy.getFullYear() - anio;
-  const mes = hoy.getMonth() - (mesNac - 1);
-  if (mes < 0 || (mes === 0 && hoy.getDate() < dia)) {
-    edad--;
-  }
-  if (edad > 120) return null;
-  return edad;
-}
-
-function emailValido(email) {
-  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-}
+const { calcularEdad, emailValido } = require('../utils/validaciones');
 
 // Registro de usuario
 router.post('/registro', async (req, res) => {

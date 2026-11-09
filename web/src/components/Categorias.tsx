@@ -18,6 +18,8 @@ const iconos: Record<string, string> = {
   Ron: '🥃',
   Tequila: '🍹',
   Packs: '📦',
+  Bebidas: '🥫',
+  Merchandising: '🧢',
 };
 
 function Categorias() {

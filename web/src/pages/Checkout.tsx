@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import api from '../services/api';
+import api, { mensajeDeError } from '../services/api';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 
@@ -26,20 +26,23 @@ function Checkout() {
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
+  // Carga el carrito al entrar. "activo" evita actualizar el estado
+  // si el usuario ya se fue de la pantalla antes de que llegue la respuesta.
   useEffect(() => {
-    cargarCarrito();
+    let activo = true;
+    api
+      .get('/carrito')
+      .then((respuesta) => {
+        if (activo) setCarrito(respuesta.data);
+      })
+      .catch((error) => console.error(error))
+      .finally(() => {
+        if (activo) setCargando(false);
+      });
+    return () => {
+      activo = false;
+    };
   }, []);
-
-  const cargarCarrito = async () => {
-    try {
-      const respuesta = await api.get('/carrito');
-      setCarrito(respuesta.data);
-    } catch (err) {
-      console.error(err);
-    } finally {
-      setCargando(false);
-    }
-  };
 
   const total =
     carrito?.items.reduce((acc, item) => acc + Number(item.precio) * item.cantidad, 0) ?? 0;
@@ -56,8 +59,8 @@ function Checkout() {
         direccion_entrega: direccion.trim(),
       });
       setPedidoConfirmado(respuesta.data.id);
-    } catch (err: any) {
-      setError(err.response?.data?.error || 'No se pudo confirmar el pedido');
+    } catch (err) {
+      setError(mensajeDeError(err, 'No se pudo confirmar el pedido'));
     } finally {
       setConfirmando(false);
     }

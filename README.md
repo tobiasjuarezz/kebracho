@@ -186,8 +186,29 @@ npm run dev
 
 ---
 
-## 7. Documentación
+## 7. Pruebas automáticas
 
+Las pruebas corren contra una base PostgreSQL **local** de prueba (nunca contra Neon: la borran y la vuelven a crear).
+
+```bash
+# variable con la base de prueba (ejemplo)
+export DATABASE_URL_TEST=postgresql://usuario:clave@localhost:5432/kebracho_test
+
+cd backend
+npm test              # 12 unitarias + 27 de integración
+
+cd ../web
+npx playwright install chromium   # solo la primera vez
+npm run test:e2e      # 8 de funcionalidades web + 4 de frontend
+```
+
+---
+
+## 8. Documentación
+
+- [`docs/Kebracho-Proyecto-Final.docx`](docs/Kebracho-Proyecto-Final.docx): documentación final del proyecto (índice del Proyecto Final).
+- [`docs/sectores/`](docs/sectores/): fichas de cada sector del local (a estas apuntan los QR).
+- [`backend/database/`](backend/database/): `schema.sql` (estructura de la base) y `seed.sql` (datos de prueba).
 - [`TAREAS.md`](TAREAS.md): tablero de tareas por revisión, con el estado de cada una.
 - [`docs/Kebracho-Manual-Identidad.docx`](docs/Kebracho-Manual-Identidad.docx): manual de identidad visual (logo, colores, tamaños, versiones y mockups).
 - [`docs/Kebracho-Proyecto-Integrador.docx`](docs/Kebracho-Proyecto-Integrador.docx): documento del proyecto (GitHub, tareas, identidad, problemática, resolución, requisitos, historias de usuario, diagramas y casos de prueba).

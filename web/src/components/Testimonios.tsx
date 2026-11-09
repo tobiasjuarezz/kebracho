@@ -3,13 +3,13 @@ function Testimonios() {
     {
       nombre: 'Martín G.',
       texto:
-        'Pedí un pack de cervezas y llegó al otro día. Excelente atención y todo bien fresco.',
+        'Pedí un pack de latas para la previa y llegó al otro día. Excelente atención y todo bien frío.',
       estrellas: 5,
     },
     {
       nombre: 'Lucía R.',
       texto:
-        'Encontré vinos que no conseguía en ningún lado cerca de casa. Repito seguro.',
+        'Me compré el buzo y la gorra con el logo. La calidad está buenísima, repito seguro.',
       estrellas: 5,
     },
     {
@@ -24,7 +24,7 @@ function Testimonios() {
     <section style={estilos.seccion}>
       <div style={estilos.contenedor}>
         <h2 style={estilos.titulo}>Lo que dicen nuestros clientes</h2>
-        <p style={estilos.subtitulo}>Miles de compras ya realizadas</p>
+        <p style={estilos.subtitulo}>Reseñas de clientes</p>
 
         <div style={estilos.grilla}>
           {reseñas.map((reseña) => (

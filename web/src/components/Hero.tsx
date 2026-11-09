@@ -4,15 +4,15 @@ function Hero() {
   return (
     <section style={estilos.seccion}>
       <div style={estilos.contenedor}>
-        <div style={estilos.tag}>🚚 Envíos en 24/48hs a todo el país</div>
+        <div style={estilos.tag}>🚚 Entregas en Zona Sur en 24/48 hs</div>
         <h1 style={estilos.titulo}>
           Las mejores bebidas,
           <br />
           <span style={estilos.tituloDestacado}>al mejor precio</span>
         </h1>
         <p style={estilos.bajada}>
-          Cervezas, vinos, whisky y mucho más. Comprá online y recibilo en tu
-          casa, con la mejor selección premium.
+          Latas, botellas, packs y el merch de Kebracho. Pedilo online y
+          recibilo en tu casa, para la previa o la juntada.
         </p>
         <div style={estilos.botones}>
           <Link to="/categorias" style={estilos.botonPrimario}>
