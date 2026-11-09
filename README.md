@@ -208,7 +208,7 @@ npm run test:e2e      # 8 de funcionalidades web + 4 de frontend
 
 - [`docs/Kebracho-Proyecto-Final.docx`](docs/Kebracho-Proyecto-Final.docx): documentación final del proyecto (índice del Proyecto Final).
 - [`docs/sectores/`](docs/sectores/): fichas de cada sector del local (a estas apuntan los QR).
-- [`backend/database/`](backend/database/): `schema.sql` (estructura de la base) y `seed.sql` (datos de prueba).
+- [`backend/database/`](backend/database/): `schema.sql` (misma estructura que la base de Neon), `seed.sql` (datos de prueba) y `migraciones/002_restricciones.sql` (reglas CHECK e índices, pendiente de correr en Neon).
 - [`TAREAS.md`](TAREAS.md): tablero de tareas por revisión, con el estado de cada una.
 - [`docs/Kebracho-Manual-Identidad.docx`](docs/Kebracho-Manual-Identidad.docx): manual de identidad visual (logo, colores, tamaños, versiones y mockups).
 - [`docs/Kebracho-Proyecto-Integrador.docx`](docs/Kebracho-Proyecto-Integrador.docx): documento del proyecto (GitHub, tareas, identidad, problemática, resolución, requisitos, historias de usuario, diagramas y casos de prueba).
