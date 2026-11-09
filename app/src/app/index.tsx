@@ -11,6 +11,8 @@ export default function LoginScreen() {
   const [password, setPassword] = useState('');
   const [cargando, setCargando] = useState(false);
   const [verificandoSesion, setVerificandoSesion] = useState(true);
+  // Si ya inició sesión antes y activó Face ID, mostramos el botón para entrar con Face ID
+  const [puedeEntrarConFaceId, setPuedeEntrarConFaceId] = useState(false);
 
   useEffect(() => {
     verificarSesionGuardada();
@@ -24,6 +26,7 @@ export default function LoginScreen() {
       const faceIdConfigurado = await AsyncStorage.getItem('faceIdConfigurado');
 
       if (token && faceIdActivado === 'true') {
+        setPuedeEntrarConFaceId(true);
         // Tiene Face ID: se lo pedimos para entrar
         const exito = await autenticarConFaceId('Ingresá con Face ID a Kebracho');
         if (exito) {
@@ -39,6 +42,16 @@ export default function LoginScreen() {
       console.error(error);
     } finally {
       setVerificandoSesion(false);
+    }
+  };
+
+  // Botón "Ingresar con Face ID" (por si canceló el pedido automático al abrir la app)
+  const entrarConFaceId = async () => {
+    const exito = await autenticarConFaceId('Ingresá con Face ID a Kebracho');
+    if (exito) {
+      router.replace('/explore');
+    } else {
+      Alert.alert('No se pudo verificar', 'Ingresá con tu email y contraseña.');
     }
   };
 
@@ -112,6 +125,11 @@ export default function LoginScreen() {
         <TouchableOpacity style={styles.boton} onPress={handleLogin} disabled={cargando}>
           <Text style={styles.botonTexto}>{cargando ? 'Ingresando...' : 'Ingresar'}</Text>
         </TouchableOpacity>
+        {puedeEntrarConFaceId && (
+          <TouchableOpacity style={styles.botonFaceId} onPress={entrarConFaceId} disabled={cargando}>
+            <Text style={styles.botonFaceIdTexto}>🔒 Ingresar con Face ID / huella</Text>
+          </TouchableOpacity>
+        )}
         <TouchableOpacity onPress={() => router.push('/registro')} style={styles.linkBox}>
           <Text style={styles.linkTexto}>
             ¿No tenés cuenta? <Text style={styles.linkTextoBold}>Registrate</Text>
@@ -178,6 +196,19 @@ const styles = StyleSheet.create({
   botonTexto: {
     color: '#1E1E1E',
     fontSize: 16,
+    fontWeight: '700',
+  },
+  botonFaceId: {
+    borderWidth: 1,
+    borderColor: '#F2C229',
+    paddingVertical: 14,
+    borderRadius: 16,
+    alignItems: 'center',
+    marginTop: 12,
+  },
+  botonFaceIdTexto: {
+    color: '#F2C229',
+    fontSize: 15,
     fontWeight: '700',
   },
   linkBox: {

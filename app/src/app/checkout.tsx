@@ -12,7 +12,7 @@ import {
 import { router, useFocusEffect } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import api, { API_URL } from '../services/api';
-import { autenticarConFaceId } from '../utils/biometria';
+import { autenticarConFaceId, dispositivoSoportaFaceId } from '../utils/biometria';
 import LeyendaLegal from '../components/leyenda-legal';
 
 type ItemCarrito = {
@@ -34,13 +34,23 @@ export default function CheckoutScreen() {
   const [direccion, setDireccion] = useState('');
   const [passwordConfirmacion, setPasswordConfirmacion] = useState('');
   const [confirmando, setConfirmando] = useState(false);
-  // Si el usuario activó Face ID, confirma la compra con eso.
-  // Si no lo activó (o falla), se pide la contraseña.
-  const [usaFaceId, setUsaFaceId] = useState(false);
+  // El usuario elige cómo confirmar la compra: con Face ID / huella o con la
+  // misma contraseña con la que inicia sesión. Face ID solo aparece como opción
+  // si lo activó y el celu lo soporta.
+  const [faceIdDisponible, setFaceIdDisponible] = useState(false);
+  const [metodo, setMetodo] = useState<'faceid' | 'password'>('password');
 
   useEffect(() => {
-    AsyncStorage.getItem('faceIdActivado').then((valor) => setUsaFaceId(valor === 'true'));
+    const revisarFaceId = async () => {
+      const activado = (await AsyncStorage.getItem('faceIdActivado')) === 'true';
+      const soportado = activado && (await dispositivoSoportaFaceId());
+      setFaceIdDisponible(soportado);
+      setMetodo(soportado ? 'faceid' : 'password');
+    };
+    revisarFaceId();
   }, []);
+
+  const usaFaceId = faceIdDisponible && metodo === 'faceid';
 
   useFocusEffect(
     useCallback(() => {
@@ -79,10 +89,11 @@ export default function CheckoutScreen() {
       const exito = await autenticarConFaceId('Confirmá tu compra en Kebracho');
       if (!exito) {
         setConfirmando(false);
-        setUsaFaceId(false);
+        // Si Face ID falla o lo cancela, le cambiamos a contraseña
+        setMetodo('password');
         Alert.alert(
           'No se pudo verificar',
-          'Ingresá tu contraseña para confirmar la compra.'
+          'Ingresá tu contraseña de inicio de sesión para confirmar la compra.'
         );
         return;
       }
@@ -191,13 +202,39 @@ export default function CheckoutScreen() {
           multiline
         />
 
+        <Text style={styles.seccionTitulo}>¿Cómo querés confirmar la compra?</Text>
+        {faceIdDisponible && (
+          <View style={styles.selector}>
+            <TouchableOpacity
+              style={[styles.opcion, metodo === 'faceid' && styles.opcionActiva]}
+              onPress={() => setMetodo('faceid')}
+              disabled={confirmando}
+            >
+              <Text style={[styles.opcionTexto, metodo === 'faceid' && styles.opcionTextoActivo]}>
+                🔒 Face ID / huella
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[styles.opcion, metodo === 'password' && styles.opcionActiva]}
+              onPress={() => setMetodo('password')}
+              disabled={confirmando}
+            >
+              <Text style={[styles.opcionTexto, metodo === 'password' && styles.opcionTextoActivo]}>
+                🔑 Contraseña
+              </Text>
+            </TouchableOpacity>
+          </View>
+        )}
+
         {usaFaceId ? (
-          <Text style={styles.aviso}>
-            🔒 Al confirmar te vamos a pedir Face ID / huella para validar la compra.
+          <Text style={[styles.aviso, { marginBottom: 16 }]}>
+            Al confirmar te vamos a pedir Face ID / huella para validar la compra.
           </Text>
         ) : (
           <>
-            <Text style={styles.seccionTitulo}>Confirmá tu contraseña</Text>
+            <Text style={[styles.aviso, { marginBottom: 8 }]}>
+              Ingresá la misma contraseña que usás para iniciar sesión.
+            </Text>
             <TextInput
               style={styles.input}
               placeholder="Tu contraseña"
@@ -224,7 +261,7 @@ export default function CheckoutScreen() {
           disabled={confirmando}
         >
           <Text style={styles.botonConfirmarTexto}>
-            {confirmando ? 'Confirmando...' : usaFaceId ? 'Confirmar con Face ID' : 'Confirmar pedido'}
+            {confirmando ? 'Confirmando...' : usaFaceId ? 'Confirmar con Face ID' : 'Confirmar con contraseña'}
           </Text>
         </TouchableOpacity>
       </View>
@@ -329,6 +366,32 @@ const styles = StyleSheet.create({
     color: '#6b7280',
     fontSize: 12,
     lineHeight: 18,
+  },
+  selector: {
+    flexDirection: 'row',
+    gap: 10,
+    marginBottom: 12,
+  },
+  opcion: {
+    flex: 1,
+    backgroundColor: '#2B2B2B',
+    borderWidth: 1,
+    borderColor: '#3D3D3D',
+    borderRadius: 14,
+    paddingVertical: 14,
+    alignItems: 'center',
+  },
+  opcionActiva: {
+    borderColor: '#F2C229',
+    backgroundColor: '#3A3320',
+  },
+  opcionTexto: {
+    color: '#9ca3af',
+    fontSize: 14,
+    fontWeight: '600',
+  },
+  opcionTextoActivo: {
+    color: '#F2C229',
   },
   footer: {
     padding: 20,
