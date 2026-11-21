@@ -12,7 +12,7 @@ Tobias Juárez · 7° 3ª · E.E.S. Técnica N°1
 
 ## Orden de la exposición
 
-15 diapositivas, unos 12 a 15 minutos, y después la demo en vivo.
+21 diapositivas: unos 15 a 20 minutos, y después la demo en vivo. Las diapositivas de código dicen en qué archivo está cada parte, para abrirlo en VS Code si el profesor lo pide.
 
 | # | Diapositiva | Sección del documento |
 |---|---|---|
@@ -23,14 +23,20 @@ Tobias Juárez · 7° 3ª · E.E.S. Técnica N°1
 | 5 | Arquitectura | 3 |
 | 6 | Base de datos | 4 |
 | 7 | Una compra, paso a paso | 5 |
-| 8 | Seguridad y normativa | 6 |
-| 9 | Pruebas | 7 |
-| 10 | Despliegue | 8 |
-| 11 | Ciclo de vida | 9 |
-| 12 | Marketing e identidad | 10 |
-| 13 | Lo que funciona y lo que sigue | 8.5 (pendientes) |
-| 14 | Uso de IA | Anexo A |
-| 15 | Gracias, demo y preguntas | — |
+| 8 | Código: registro +18 (`routes/usuarios.js`, `utils/validaciones.js`) | 5.2 y 5.3 |
+| 9 | Código: login y token (`routes/usuarios.js`, `middleware/auth.js`) | 5.2 y 6.3 |
+| 10 | Código: la compra en una transacción (`routes/pedidos.js`) | 4.3 y 5.1 |
+| 11 | Código: Face ID (`app/src/utils/biometria.ts`) | 5.1 |
+| 12 | Seguridad y normativa | 6 |
+| 13 | Pruebas | 7 |
+| 14 | Código: una prueba por dentro (`tests/unit/validaciones.test.js`) | 7.1 |
+| 15 | Cambio en vivo: ordenar el catálogo por precio (`routes/productos.js`) | — |
+| 16 | Despliegue | 8 |
+| 17 | Ciclo de vida | 9 |
+| 18 | Marketing e identidad | 10 |
+| 19 | Lo que funciona y lo que sigue | 8.5 (pendientes) |
+| 20 | Uso de IA | Anexo A |
+| 21 | Gracias, demo y preguntas | — |
 
 ## La consigna, punto por punto
 
