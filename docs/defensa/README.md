@@ -1,6 +1,6 @@
 # Defensa del Proyecto Final — Kebracho
 
-**Aplicaciones Móviles** · Prof. Pablo Facundo Gareis · Defensa: 25 o 26 de noviembre de 2026
+**Aplicaciones Móviles** · Prof. Pablo Facundo Gareis · Defensa: semana del 30 de noviembre de 2026
 Tobias Juárez · 7° 3ª · E.E.S. Técnica N°1
 
 ## Archivos

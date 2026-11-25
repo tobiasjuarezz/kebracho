@@ -115,7 +115,7 @@ El proyecto lo desarrollo de forma individual, así que tomo todas las responsab
 | Base de datos | Tobias Juárez | Tablas, claves, relaciones y reglas en PostgreSQL (Neon) |
 | Pruebas | Tobias Juárez | Casos positivos, negativos y de límite; pruebas en Postman y pruebas integrales app + servidor |
 | Documentación | Tobias Juárez | Requisitos, historias de usuario, diagramas, manual de usuario y registro de uso de IA |
-| Integración de IA | Tobias Juárez | Asistente de compras con Inteligencia Artificial dentro de la app |
+| Integración de IA | Tobias Juárez | Asistente de compras con Inteligencia Artificial dentro de la app (pendiente: no entró en esta versión) |
 
 ### Planificación
 
@@ -129,10 +129,10 @@ El proyecto lo desarrollo de forma individual, así que tomo todas las responsab
 
 ### Forma de trabajo con Git
 
-- **Ramas:** `main` tiene siempre la versión estable que funciona. `develop` es donde se juntan los avances de la semana. Cada funcionalidad nueva se hace en su propia rama, por ejemplo `feature/checkout` o `feature/asistente-ia`.
+- **Ramas:** trabajé directo en `main`, que tiene la versión que funciona. La rama `entrega-final` es una copia anterior del proyecto, del 9 de noviembre.
 - **Commits:** mensajes cortos que dicen qué se cambió, por ejemplo "Agrega control de stock al confirmar pedido".
-- **Issues:** cada tarea es un issue, con su etiqueta (app, backend, web, base de datos, documentación, pruebas) y la revisión en la que tiene que estar lista.
-- **Pull requests:** cuando termino una rama abro un pull request hacia `develop`, reviso los cambios y recién ahí lo uno. Al final de cada semana `develop` pasa a `main`.
+- **Tareas:** las seguí en [`TAREAS.md`](TAREAS.md), no en issues de GitHub.
+- **Para el mantenimiento:** el plan es hacer cada cambio en su propia rama (`feature/…` o `fix/…`) y unirlo con un pull request. Está en la sección 8.5 del documento final.
 - **Seguridad:** las contraseñas y claves del servidor están en un archivo `.env` que no se sube al repositorio. En su lugar está `backend/.env.example`, con los nombres de las variables y sin los valores reales.
 
 ---
@@ -149,7 +149,7 @@ El proyecto lo desarrollo de forma individual, así que tomo todas las responsab
 - **Base de datos:** PostgreSQL alojado en Neon (autorizado por el profesor en lugar de Supabase; los dos usan PostgreSQL).
 - **Autenticación:** contraseñas encriptadas con bcrypt y sesiones con JWT.
 - **Correo:** Nodemailer con Gmail, para el aviso de compra nueva al administrador.
-- **Inteligencia Artificial:** API de un modelo de IA para el asistente de compras.
+- **Inteligencia Artificial:** el asistente de compras con IA quedó pendiente; no está en esta versión.
 
 ---
 
@@ -209,7 +209,7 @@ npm run test:e2e      # 8 de funcionalidades web + 4 de frontend
 - [`docs/Kebracho-Proyecto-Final.docx`](docs/Kebracho-Proyecto-Final.docx): documentación final del proyecto (índice del Proyecto Final).
 - [`docs/sectores/`](docs/sectores/): fichas de cada sector del local (a estas apuntan los QR).
 - [`docs/marketing/`](docs/marketing/): local en Sweet Home 3D, tríptico, publicidades y carteles QR.
-- [`docs/defensa/`](docs/defensa/): presentación de la defensa del 25 y 26 de noviembre (PowerPoint y PDF), con el orden de la exposición.
+- [`docs/defensa/`](docs/defensa/): presentación de la defensa de la semana del 30 de noviembre (PowerPoint y PDF), con el orden de la exposición.
 - [`backend/database/`](backend/database/): `schema.sql` (misma estructura que la base de Neon), `seed.sql` (datos de prueba) y `migraciones/002_restricciones.sql` (reglas CHECK e índices, pendiente de correr en Neon).
 - [`TAREAS.md`](TAREAS.md): tablero de tareas por revisión, con el estado de cada una.
 - [`docs/Kebracho-Manual-Identidad.docx`](docs/Kebracho-Manual-Identidad.docx): manual de identidad visual (logo, colores, tamaños, versiones y mockups).
